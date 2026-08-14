@@ -180,6 +180,9 @@ a.entry-body:hover .entry-title { text-decoration: underline; }
   cursor: zoom-out;
   z-index: 1000;
 }
+#ntfyblog-lightbox[hidden] {
+  display: none;
+}
 #ntfyblog-lightbox img {
   max-width: 92vw;
   max-height: 92vh;

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ntfyblog</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="ntfyblog-root">
+  <div id="ntfyblog-header" hidden>
+    <span id="ntfyblog-title"></span>
+    <span id="ntfyblog-status" class="status status-unknown" title="Connecting…"></span>
+  </div>
+  <div id="ntfyblog-feed" aria-live="polite"></div>
+  <p id="ntfyblog-empty" hidden>No entries yet.</p>
+</div>
+
+<div id="ntfyblog-lightbox" hidden>
+  <img id="ntfyblog-lightbox-img" src="" alt="">
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

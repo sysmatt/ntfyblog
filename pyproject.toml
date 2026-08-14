@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ntfyblog"
+version = "0.1.0"
+description = "Subscribes to ntfy.sh topics and generates a live, embeddable JSON-driven web blog"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.28",
+]
+
+[project.scripts]
+ntfyblog = "ntfyblog.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+packages = ["ntfyblog", "ntfyblog._vendor"]

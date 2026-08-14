@@ -1,0 +1,62 @@
+# ntfyblog config — copy to /etc/ntfyblog/ntfyblog.ini (or point --ini at a
+# copy elsewhere). Read only by the Python collector; never shipped to the
+# browser. See DESIGN.md for the full rationale behind each setting.
+
+[web]
+# Also the collector's own output dir unless overridden in [collector] below.
+data_dir       = /var/local/ntfyblog/data
+
+# How many entries the embedded blog displays, newest first. Independent of
+# each profile's keep_entries below — you can retain far more than you show.
+display_count  = 10
+
+# How often (seconds) the browser re-fetches entries.json.
+poll_interval  = 10
+
+# Sizes the embedded widget's own root container. The <iframe> tag on
+# whatever page embeds this is still sized independently by you.
+frame_width    = 400
+frame_height   = 600
+
+# Shown in the widget's header bar. Leave blank to hide the header entirely.
+title          = Live Feed
+
+# Non-image/video attachments (pdf, zip, ...): off by default, meaning an
+# entry with one of these displays exactly as if it had no attachment at
+# all. Set true to show a plain filename + link for them.
+show_file_attachments = false
+
+[collector]
+# Uncomment to point the collector's data dir somewhere different from what
+# the web layer is told to read from (e.g. different local mount points on
+# two hosts sharing the data dir over NFS). Usually left unset.
+;data_dir = /var/local/ntfyblog/data
+
+# One [profile:NAME] section per topic to monitor. NAME is never sent to the
+# browser as a topic/URL, but IS shown publicly as that entry's source badge
+# — pick something you're fine displaying, not necessarily the real topic name.
+
+[profile:home]
+url          = https://ntfy.sh
+topic        = replace-with-your-actual-topic
+;username    =
+;password    =
+;token       =
+
+# Retention — independent caps, an entry is purged the moment it violates
+# EITHER one. 0/unset = unlimited by that dimension.
+keep_entries = 50
+;keep_hours  =
+keep_days    = 7
+
+[profile:workshop]
+url          = https://ntfy.example.com
+topic        = replace-with-your-actual-topic
+token        = tk_your_token_here
+keep_entries = 20
+keep_days    = 3
+
+[logging]
+; level   = verbose    ; trace | debug | verbose | info
+; logfile = /var/log/ntfyblog.log
+; syslog  = true

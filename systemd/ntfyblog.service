@@ -1,0 +1,23 @@
+[Unit]
+Description=ntfyblog collector — subscribes to ntfy.sh topics and writes the blog's JSON feed
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ntfyblog
+Group=ntfyblog
+ExecStart=/usr/local/bin/ntfyblog --ini /etc/ntfyblog/ntfyblog.ini
+Restart=always
+RestartSec=5
+
+# Hardening — the service only ever needs to read its own INI and read/write
+# its own data dir. Adjust ReadWritePaths if you changed data_dir in the INI.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/local/ntfyblog/data
+
+[Install]
+WantedBy=multi-user.target

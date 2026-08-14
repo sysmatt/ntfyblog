@@ -35,6 +35,7 @@
   const lightboxImgEl = document.getElementById("ntfyblog-lightbox-img");
 
   let config = DEFAULT_CONFIG;
+  let emojiMap = {};
   const renderedNodes = new Map(); // entry id -> card element currently in the DOM
 
   const URL_RE = /(https?:\/\/[^\s<>"']+)/g;
@@ -61,6 +62,17 @@
     return frag;
   }
 
+  function splitTags(tags) {
+    const emojis = [];
+    const textTags = [];
+    for (const tag of tags || []) {
+      const emoji = emojiMap[tag];
+      if (emoji) emojis.push(emoji);
+      else textTags.push(tag);
+    }
+    return { emojis, textTags };
+  }
+
   function buildCard(entry) {
     const card = document.createElement("article");
     card.className = "entry";
@@ -68,6 +80,8 @@
 
     const priority = entry.priority || 3;
     card.classList.add(`priority-${priority}`);
+
+    const { emojis, textTags } = splitTags(entry.tags);
 
     const meta = document.createElement("div");
     meta.className = "entry-meta";
@@ -102,26 +116,31 @@
       body.rel = "noopener noreferrer";
     }
 
+    const emojiPrefix = emojis.length ? emojis.join(" ") + " " : "";
+
     if (entry.title) {
       const h = document.createElement("h3");
       h.className = "entry-title";
-      h.textContent = entry.title;
+      h.textContent = emojiPrefix + entry.title;
       body.appendChild(h);
     }
 
     if (entry.message) {
       const p = document.createElement("p");
       p.className = "entry-message";
+      if (!entry.title && emojiPrefix) {
+        p.appendChild(document.createTextNode(emojiPrefix));
+      }
       p.appendChild(linkify(entry.message));
       body.appendChild(p);
     }
 
     card.appendChild(body);
 
-    if (entry.tags && entry.tags.length) {
+    if (textTags.length) {
       const tags = document.createElement("div");
       tags.className = "entry-tags";
-      for (const tag of entry.tags) {
+      for (const tag of textTags) {
         const t = document.createElement("span");
         t.className = "entry-tag";
         t.textContent = tag;
@@ -243,6 +262,15 @@
     if (config.frame_height) root.style.maxHeight = `${config.frame_height}px`;
   }
 
+  async function fetchEmojiMap() {
+    try {
+      const resp = await fetch("emoji.json", { cache: "force-cache" });
+      if (resp.ok) emojiMap = await resp.json();
+    } catch (e) {
+      // fall back to no emoji translation — tags still render as text
+    }
+  }
+
   let lastFetchAt = 0;
 
   async function fetchEntries() {
@@ -264,7 +292,7 @@
   }
 
   async function start() {
-    await fetchConfig();
+    await Promise.all([fetchConfig(), fetchEmojiMap()]);
     await fetchEntries();
     const intervalMs = (config.poll_interval || DEFAULT_CONFIG.poll_interval) * 1000;
     setInterval(fetchEntries, intervalMs);

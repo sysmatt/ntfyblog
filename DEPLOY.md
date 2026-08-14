@@ -38,8 +38,9 @@ sudo journalctl -u ntfyblog -f -n 50
 
 ## 2. Web layer
 
-The `web/` directory (`index.html`, `app.js`, `style.css`) is plain static
-files — copy it wherever your web server already serves static content:
+The `web/` directory (`index.html`, `app.js`, `style.css`, `emoji.json`) is
+plain static files — copy it wherever your web server already serves static
+content:
 
 ```bash
 sudo mkdir -p /var/www/blog

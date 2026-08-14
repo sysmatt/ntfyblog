@@ -40,7 +40,9 @@ sudo journalctl -u ntfyblog -f -n 50
 
 The `web/` directory (`index.html`, `app.js`, `style.css`, `emoji.json`) is
 plain static files — copy it wherever your web server already serves static
-content:
+content. `emoji.json` maps ntfy tag short codes to emoji for the title-prefix
+rendering; regenerate it with `python scripts/update-emoji.py` when new emoji
+land upstream in [gemoji](https://github.com/github/gemoji).
 
 ```bash
 sudo mkdir -p /var/www/blog
